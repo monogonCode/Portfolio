@@ -8,11 +8,26 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:cv": "node scripts/generate-retro-cv.cjs",
+    "glados:voices": "python scripts/generate_glados_voices.py",
     "preview": "astro preview",
+    "deploy": "./deploy.sh",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.3.2"
+    "@astrojs/react": "^6.0.6",
+    "@hackernoon/pixel-icon-library": "^1.1.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "98.css": "^0.1.21",
+    "astro": "^7.3.2",
+    "lucide-react": "^1.47.0",
+    "nes.css": "^2.2.1",
+    "pixelarticons": "^2.4.1",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "system.css": "^0.5.3",
+    "xp.css": "^0.2.6"
   },
   "allowScripts": {
     "esbuild": true

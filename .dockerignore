@@ -1,0 +1,12 @@
+node_modules
+.git
+.gitignore
+.astro
+dist
+.vscode
+*.log
+scratch
+deploy.sh
+README.md
+AGENTS.md
+CLAUDE.md

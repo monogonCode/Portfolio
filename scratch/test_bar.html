@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { padding: 20px; font-family: 'Segoe UI', Tahoma, sans-serif; background: #fff; width: 300px; }
+
+  .lang-item { margin-bottom: 6px; }
+  .lang-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 2px;
+  }
+  .lang-pct {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  /* Approach A: repeating-linear-gradient */
+  .retro-progress-track {
+    border: 1px solid #7f7f7f;
+    border-right-color: #dfdfdf;
+    border-bottom-color: #dfdfdf;
+    background: #ffffff;
+    padding: 1px;
+    height: 11px;
+    width: 100%;
+    overflow: hidden;
+  }
+  .retro-progress-fill-gradient {
+    height: 100%;
+    background: repeating-linear-gradient(
+      to right,
+      #000080 0px,
+      #000080 7px,
+      #ffffff 7px,
+      #ffffff 9px
+    );
+  }
+
+  /* Approach B: Discrete flex blocks */
+  .retro-progress-fill-flex {
+    height: 100%;
+    display: flex;
+    gap: 2px;
+  }
+  .retro-block {
+    width: 7px;
+    height: 100%;
+    background: #000080;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+  <h3>Approach A: Gradient</h3>
+  <div class="lang-item">
+    <div class="lang-header"><span>Español</span></div>
+    <div class="retro-progress-track">
+      <div class="retro-progress-fill-gradient" style="width: 100%;"></div>
+    </div>
+  </div>
+  <div class="lang-item">
+    <div class="lang-header"><span>Inglés</span></div>
+    <div class="retro-progress-track">
+      <div class="retro-progress-fill-gradient" style="width: 60%;"></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top: 20px;">Approach B: Flex blocks</h3>
+  <div class="lang-item">
+    <div class="lang-header"><span>Español</span><span class="lang-pct">100%</span></div>
+    <div class="retro-progress-track">
+      <div class="retro-progress-fill-flex">
+        <!-- 26 blocks for 100% -->
+        <div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div>
+      </div>
+    </div>
+  </div>
+  <div class="lang-item">
+    <div class="lang-header"><span>Inglés</span><span class="lang-pct">60%</span></div>
+    <div class="retro-progress-track">
+      <div class="retro-progress-fill-flex">
+        <!-- 16 blocks for 60% -->
+        <div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div><div class="retro-block"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

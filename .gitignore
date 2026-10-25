@@ -16,6 +16,11 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.duckdns.env
+
+# logs
+duckdns.log
+*.log
 
 # macOS-specific files
 .DS_Store

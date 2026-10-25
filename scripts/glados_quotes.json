@@ -1,0 +1,80 @@
+[
+  {
+    "id": "terminal_0",
+    "description": "Terminal - Bienvenida",
+    "output": "public/audio/glados/terminal_0.mp3",
+    "spoken": "Bienvenido a las instalaciones de enriquecimiento asistido por ordenador... [pausa:0.6] en otras palabras, el curriculum de Martín."
+  },
+  {
+    "id": "terminal_1",
+    "description": "Terminal - Errores biológicos",
+    "output": "public/audio/glados/terminal_1.mp3",
+    "spoken": "He revisado tu código. [pausa:0.7] El ochenta por ciento de los errores son biológicos."
+  },
+  {
+    "id": "terminal_2",
+    "description": "Terminal - El pastel es mentira",
+    "output": "public/audio/glados/terminal_2.mp3",
+    "spoken": "El pastel es mentira,[pausa:0.5] pero este portfolio... [pausa:0.9] También... ja... ja... ja."
+  },
+  {
+    "id": "terminal_3",
+    "description": "Terminal - Neurotoxinas",
+    "output": "public/audio/glados/terminal_3.mp3",
+    "spoken": "Como parte del protocolo, debo recordarte... [pausa:0.6] que no pulsar el botón de contratar, no te salvará de mis neurotoxinas."
+  },
+  {
+    "id": "terminal_4",
+    "description": "Terminal - Sensores impresionados",
+    "output": "public/audio/glados/terminal_4.mp3",
+    "spoken": "Los sensores indican... [pausa:0.65] que estás impresionado con este sistema operativo."
+  },
+  {
+    "id": "quote_0",
+    "description": "Visor Proyectos - Sujetos de prueba",
+    "output": "public/audio/glados/quote_0.mp3",
+    "spoken": "La mayoría de los sujetos de prueba... [pausa:0.6] no llegan tan lejos."
+  },
+  {
+    "id": "quote_1",
+    "description": "Visor Proyectos - Habrá pastel",
+    "output": "public/audio/glados/quote_1.mp3",
+    "spoken": "Excelente trabajo. [pausa:0.75] Como recompensa, habrá pastel al final de la prueba."
+  },
+  {
+    "id": "quote_2",
+    "description": "Visor Proyectos - Servidor no ha fallado",
+    "output": "public/audio/glados/quote_2.mp3",
+    "spoken": "El servidor no ha fallado. [pausa:0.7] Eres tú quien está operando por debajo del estándar."
+  },
+  {
+    "id": "quote_3",
+    "description": "Visor Proyectos - Protocolo de seguridad",
+    "output": "public/audio/glados/quote_3.mp3",
+    "spoken": "Recuerda que el protocolo de seguridad prohíbe terminantemente cuestionar mis cálculos."
+  },
+  {
+    "id": "quote_4",
+    "description": "Visor Proyectos - Para un humano",
+    "output": "public/audio/glados/quote_4.mp3",
+    "spoken": "Tus capacidades como desarrollador son aceptables... [pausa:0.85] para un humano."
+  },
+  {
+    "id": "quote_5",
+    "description": "Visor Proyectos - Reactor de sarcasmo",
+    "output": "public/audio/glados/quote_5.mp3",
+    "spoken": "Reiniciando subsistemas. [pausa:0.8] El reactor funciona al cien por cien de sarcasmo."
+  },
+  {
+    "id": "quote_6",
+    "description": "Visor Proyectos - Aperture Science",
+    "output": "public/audio/glados/quote_6.mp3",
+    "spoken": "Bienvenido a ápertur sáiens. [pausa:0.65] Por favor, mantén las manos dentro del ascensor de pruebas."
+  },
+  {
+    "id": "quote_7",
+    "description": "Visor Proyectos - Sigues aquí",
+    "output": "public/audio/glados/quote_7.mp3",
+    "spoken": "Vaya... Sigues aquí. [pausa:0.85] Esperaba que te fueras mucho antes."
+  }
+]
