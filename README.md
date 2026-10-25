@@ -1,6 +1,6 @@
-# Portfolio Retro OS - Guía Personal de Desarrollo y Despliegue
+# Portfolio Retro OS
 
-Portfolio web personal interactivo simulando un sistema operativo retro multi-tema (Windows 98, Windows XP, Mac System, NES). Diseñado como SPA estática ultraligera montada sobre Astro y React, containerizada con Podman y servida mediante Nginx tras Nginx Proxy Manager y DuckDNS.
+Portfolio web personal interactivo simulando un sistema operativo retro multi-tema (Windows 98, Windows XP, Mac System, NES). Diseñado como SPA estática montada sobre Astro y React, containerizada con Podman y servida mediante Nginx tras Nginx Proxy Manager y DuckDNS.
 
 * **URL Pública:** [https://garbisoft.duckdns.org/](https://garbisoft.duckdns.org/)
 * **Contenedor:** `portfolio-retro-os`
