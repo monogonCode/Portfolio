@@ -11,6 +11,7 @@ export interface DesktopIconItem {
   accentColor?: string;
   iconImage?: string;
   isFolder?: boolean;
+  externalUrl?: string;
 }
 
 interface DesktopIconProps {
@@ -64,9 +65,10 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
       const isMac = currentTheme === 'mac';
       const topLimit = isMac ? 26 : 8;
       const deskWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-      const deskHeight = typeof window !== 'undefined' ? window.innerHeight - (isMac ? 24 : 38) : 700;
-      const newX = Math.max(8, Math.min(deskWidth - 100, startIconPos.current.x + dx));
-      const newY = Math.max(topLimit, Math.min(deskHeight - 110, startIconPos.current.y + dy));
+      const bottomBar = isMac ? 24 : deskWidth < 768 ? 52 : 48;
+      const deskHeight = typeof window !== 'undefined' ? window.innerHeight - bottomBar : 700;
+      const newX = Math.max(8, Math.min(deskWidth - 110, startIconPos.current.x + dx));
+      const newY = Math.max(topLimit, Math.min(deskHeight - 108, startIconPos.current.y + dy));
       setCurrentPos({ x: newX, y: newY });
     }
   };
@@ -110,14 +112,11 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
 
     switch (item.previewType) {
       case 'glados-eye':
-        return '/images/icons/xp/glados.svg';
+        return '/images/icons/projects/glados-assistant.svg';
       case 'audio-wave':
-        return '/images/icons/xp/media-player.webp';
+        return '/images/icons/projects/transres-audio.svg';
       case 'terminal-status':
-        return '/images/icons/xp/network.webp';
-      case 'ie-browser':
-      case 'browser':
-        return '/images/icons/xp/ie.webp';
+        return '/images/icons/projects/delta-servers.svg';
       case 'cv-card':
         return '/images/icons/xp/wordpad.webp';
       case 'dos-terminal':
@@ -142,22 +141,34 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label={item.title}
+      aria-pressed={isSelected}
       className={`desktop-icon-card ${isSelected ? 'selected' : ''}`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onDoubleClick={handleDoubleClick}
-      title={`${item.title} - ${isEn ? 'Double-click to open' : 'Doble clic para abrir'}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.stopPropagation();
+          sound.playWindowOpen();
+          onOpen(item.id);
+        }
+      }}
+      title={`${item.title} - ${isEn ? 'Double-click or press Enter to open' : 'Doble clic o Enter para abrir'}`}
       style={
         isPositioned
           ? {
               position: 'absolute',
               left: `${currentPos.x}px`,
               top: `${currentPos.y}px`,
-              touchAction: 'none'
+              touchAction: 'manipulation'
             }
           : {
-              touchAction: 'none'
+              touchAction: 'manipulation'
             }
       }
     >
@@ -194,7 +205,6 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
 
       {/* Clear Label with shadow for full readability */}
       <div className="desktop-icon-label">{item.title}</div>
-      {item.badge && <div className="desktop-icon-badge">{item.badge}</div>}
     </div>
   );
 };

@@ -476,7 +476,7 @@ echo -e "  ${BOLD}Contenedor:${RESET}     ${CYAN}${CONTAINER_NAME}${RESET} (${CO
 echo -e "  ${BOLD}Puerto Host:${RESET}    ${YELLOW}${SELECTED_PORT}${RESET} ${GRAY}(Mapeado al puerto 80 del contenedor)${RESET}"
 echo -e "  ${BOLD}URL Local:${RESET}      ${GREEN}http://localhost:${SELECTED_PORT}/${RESET}"
 echo -e "  ${BOLD}URL de Red:${RESET}     ${GREEN}http://${HOST_IP}:${SELECTED_PORT}/${RESET}"
-echo -e "  ${BOLD}URL Pública:${RESET}    ${CYAN}https://garbisoft.duckdns.org/${RESET} ${GRAY}(Nginx Proxy Manager)${RESET}"
+echo -e "  ${BOLD}URL Pública:${RESET}    ${CYAN}https://monogoncode.dev/${RESET} ${GRAY}(Nginx Proxy Manager)${RESET}"
 echo ""
 echo -e "${BOLD}Comandos de gestión rápida:${RESET}"
 echo -e "  ${GRAY}● Ver logs:${RESET}       ./deploy.sh --logs"

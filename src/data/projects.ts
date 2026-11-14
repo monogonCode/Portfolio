@@ -48,6 +48,7 @@ export const PROJECTS: Project[] = [
     ],
     architecture: 'Android Kotlin (OCR) ➔ API REST Backend ➔ MariaDB / Podman ➔ Panel React Web',
     repoName: 'monogonCode/DeltaTraz',
+    liveUrl: 'https://dt.monogoncode.dev',
     isProprietary: true,
     hasMockup: false,
     previewType: 'scanner',
@@ -240,6 +241,55 @@ export const PROJECTS: Project[] = [
     hasMockup: false,
     previewType: 'terminal-status',
     accentColor: '#64748b'
+  },
+  {
+    id: 'controid',
+    title: 'Controid',
+    filename: 'Controid.app',
+    tagline: 'Conecta tu Android y tu PC Linux de forma nativa, privada y sin cables',
+    category: 'Full Stack',
+    company: 'Proyecto Personal Open Source',
+    period: '2026',
+    technologies: ['Android (Kotlin)', 'C / Wayland / X11', 'GTK4', 'Bluetooth HID & BLE', 'FUSE3', 'Ed25519', 'HTML/CSS/JS'],
+    summary: 'Ecosistema nativo Linux ⇄ Android en red local o hotspot sin nubes externas: portapapeles compartido (texto e imágenes), espejo interactivo H.264/H.265, trackpad/teclado Bluetooth HID y archivos del móvil montados por FUSE3.',
+    keyFeatures: [
+      'Portapapeles compartido bidireccional al instante (texto, imágenes y capturas) entre Wayland/X11 y Android.',
+      'Pantalla interactiva en PC con controid-viewer (H.264/H.265) y control por ratón y teclado.',
+      'Modo Trackpad y teclado Bluetooth HID con respaldo TCP (/dev/uinput) y montaje FUSE3 en ~/Controid.',
+      'Emparejamiento BLE automático e intercambio criptográfico de identidad Ed25519.'
+    ],
+    architecture: 'Android + Shizuku ⇄ BLE / LAN / Ed25519 ⇄ controidd (Linux) ➔ GTK4 GUI / Viewer / FUSE3',
+    repoName: 'monogonCode/Controid',
+    githubUrl: 'https://github.com/monogonCode/Controid',
+    liveUrl: 'https://controid.monogoncode.dev',
+    isProprietary: false,
+    hasMockup: false,
+    previewType: 'touchpad',
+    accentColor: '#22c55e'
+  },
+  {
+    id: 'xana-takecontrol',
+    title: 'XanaTakeControl',
+    filename: 'Xana.app',
+    tagline: 'Plataforma de Coordinación y Control Remoto en Tiempo Real',
+    category: 'Full Stack',
+    company: 'Proyecto Personal',
+    period: '2026',
+    technologies: ['Node.js', 'WebSocket', 'JWT', 'SQLite', 'Android (Kotlin)', 'Podman / Docker'],
+    summary: 'Servidor central de coordinación y relevo WebSocket + API REST con panel web en tiempo real para conectar agentes (xanaTakeControl) y controladores (xanaControl) con autenticación JWT.',
+    keyFeatures: [
+      'Gestión de conexiones WebSocket concurrentes en tiempo real entre dispositivos agentes y controladores.',
+      'Autenticación segura mediante JWT, control de tasa (rate limiting) y persistencia en SQLite.',
+      'Dashboard web interactivo servido en https://xana.monogoncode.dev para monitorización y control.'
+    ],
+    architecture: 'xanaControl (Android) ⇄ WebSocket / JWT (xana-server Node.js + SQLite) ⇄ xanaTakeControl',
+    repoName: 'martinalejandroo25/xana-server',
+    githubUrl: 'https://github.com/martinalejandroo25/xana-server',
+    liveUrl: 'https://xana.monogoncode.dev',
+    isProprietary: false,
+    hasMockup: false,
+    previewType: 'browser',
+    accentColor: '#00d2b4'
   }
 ];
 
@@ -262,6 +312,7 @@ export const PROJECTS_EN: Project[] = [
     ],
     architecture: 'Android Kotlin (OCR) ➔ REST API Backend ➔ MariaDB / Podman ➔ React Web Dashboard',
     repoName: 'monogonCode/DeltaTraz',
+    liveUrl: 'https://dt.monogoncode.dev',
     isProprietary: true,
     hasMockup: false,
     previewType: 'scanner',
@@ -454,6 +505,55 @@ export const PROJECTS_EN: Project[] = [
     hasMockup: false,
     previewType: 'terminal-status',
     accentColor: '#64748b'
+  },
+  {
+    id: 'controid',
+    title: 'Controid',
+    filename: 'Controid.app',
+    tagline: 'Connect your Android & Linux PC natively, privately, and wirelessly',
+    category: 'Full Stack',
+    company: 'Personal Open Source Project',
+    period: '2026',
+    technologies: ['Android (Kotlin)', 'C / Wayland / X11', 'GTK4', 'Bluetooth HID & BLE', 'FUSE3', 'Ed25519', 'HTML/CSS/JS'],
+    summary: 'Native Linux ⇄ Android ecosystem over local network or hotspot with zero external clouds: shared clipboard (text & images), interactive H.264/H.265 screen mirroring, Bluetooth HID trackpad/keyboard, and FUSE3 phone storage mounting.',
+    keyFeatures: [
+      'Instant bidirectional shared clipboard (text, images, screenshots) between Wayland/X11 and Android.',
+      'Interactive screen mirroring on PC via controid-viewer (H.264/H.265) with mouse and keyboard control.',
+      'Bluetooth HID trackpad/keyboard with TCP fallback (/dev/uinput) and FUSE3 mount at ~/Controid.',
+      'Automatic BLE hotspot discovery and Ed25519 cryptographic identity pairing.'
+    ],
+    architecture: 'Android + Shizuku ⇄ BLE / LAN / Ed25519 ⇄ controidd (Linux) ➔ GTK4 GUI / Viewer / FUSE3',
+    repoName: 'monogonCode/Controid',
+    githubUrl: 'https://github.com/monogonCode/Controid',
+    liveUrl: 'https://controid.monogoncode.dev',
+    isProprietary: false,
+    hasMockup: false,
+    previewType: 'touchpad',
+    accentColor: '#22c55e'
+  },
+  {
+    id: 'xana-takecontrol',
+    title: 'XanaTakeControl',
+    filename: 'Xana.app',
+    tagline: 'Real-Time Remote Coordination & Control Platform',
+    category: 'Full Stack',
+    company: 'Personal Project',
+    period: '2026',
+    technologies: ['Node.js', 'WebSocket', 'JWT', 'SQLite', 'Android (Kotlin)', 'Podman / Docker'],
+    summary: 'Central WebSocket relay and REST API server with a real-time web dashboard connecting agents (xanaTakeControl) and controllers (xanaControl) using JWT authentication.',
+    keyFeatures: [
+      'Concurrent real-time WebSocket connection management between agent and controller devices.',
+      'JWT authentication, rate limiting, and SQLite persistence for devices and logs.',
+      'Interactive web dashboard served at https://xana.monogoncode.dev for monitoring and control.'
+    ],
+    architecture: 'xanaControl (Android) ⇄ WebSocket / JWT (xana-server Node.js + SQLite) ⇄ xanaTakeControl',
+    repoName: 'martinalejandroo25/xana-server',
+    githubUrl: 'https://github.com/martinalejandroo25/xana-server',
+    liveUrl: 'https://xana.monogoncode.dev',
+    isProprietary: false,
+    hasMockup: false,
+    previewType: 'browser',
+    accentColor: '#00d2b4'
   }
 ];
 

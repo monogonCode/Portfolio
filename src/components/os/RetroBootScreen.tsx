@@ -205,8 +205,19 @@ export const RetroBootScreen: React.FC<RetroBootScreenProps> = ({ onFinish }) =>
                   fontFamily: "'VT323', monospace"
                 }}
               >
-                {/* Fastfetch ASCII Box - Matching the screenshot */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(12px, 3vw, 40px)' }}>
+                {/* Fastfetch ASCII Box + MONOGON Logo */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'clamp(16px, 3.5vw, 44px)' }}>
+                  <img
+                    src="/images/monogon-logo-128.png"
+                    alt="MONOGON Logo"
+                    style={{
+                      width: 'clamp(88px, 11vw, 138px)',
+                      height: 'clamp(88px, 11vw, 138px)',
+                      objectFit: 'contain',
+                      filter: 'drop-shadow(0 0 10px rgba(74, 222, 128, 0.45))',
+                      flexShrink: 0
+                    }}
+                  />
                   <div>
                     <div>┌── user ────────────┐ &nbsp;martin</div>
                     <div>│ ⌘ hname &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; │ &nbsp;x4n4</div>
@@ -237,8 +248,8 @@ export const RetroBootScreen: React.FC<RetroBootScreenProps> = ({ onFinish }) =>
                 <div>~ master*</div>
                 <div>
                   {isEn
-                    ? '> Mounting projects: [DeltaTraz] [Chumbos] [LidiaHelem] [GLaDOS] [TransResAudio] ... [OK]'
-                    : '> Montando proyectos: [DeltaTraz] [Chumbos] [LidiaHelem] [GLaDOS] [TransResAudio] ... [OK]'}
+                    ? '> Mounting projects: [DeltaTraz] [Chumbos] [LidiaHelem] [Controid] [Xana] [GLaDOS] [TransResAudio] ... [OK]'
+                    : '> Montando proyectos: [DeltaTraz] [Chumbos] [LidiaHelem] [Controid] [Xana] [GLaDOS] [TransResAudio] ... [OK]'}
                 </div>
                 <div>
                   {isEn

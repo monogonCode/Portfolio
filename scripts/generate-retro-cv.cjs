@@ -2,13 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// 1. Prepare QR Code for https://garbisoft.duckdns.org
+// 1. Prepare QR Code for https://monogoncode.dev
 const qrPath = path.join(__dirname, '../public/cv/qr_portfolio.png');
 try {
   execSync(`python3 -c "
 import qrcode
 qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=3, border=1)
-qr.add_data('https://garbisoft.duckdns.org')
+qr.add_data('https://monogoncode.dev')
 qr.make(fit=True)
 img = qr.make_image(fill_color='#000080', back_color='white')
 img.save('${qrPath}')
@@ -677,11 +677,11 @@ function getCVHtml(lang = 'es') {
         </div>
       </div>
 
-      <!-- QR Code pointing to https://garbisoft.duckdns.org -->
-      <a href="https://garbisoft.duckdns.org" target="_blank" rel="noreferrer" class="qr-panel" title="${isEn ? 'Scan or click to visit Web Portfolio' : 'Escanear o pulsar para acceder al Portafolio Web'}">
+      <!-- QR Code pointing to https://monogoncode.dev -->
+      <a href="https://monogoncode.dev" target="_blank" rel="noreferrer" class="qr-panel" title="${isEn ? 'Scan or click to visit Web Portfolio' : 'Escanear o pulsar para acceder al Portafolio Web'}">
         <img src="data:image/png;base64,${qrBase64}" alt="QR Portfolio" class="qr-img" />
         <div class="qr-label">${isEn ? 'PORTFOLIO' : 'PORTAFOLIO'}</div>
-        <div class="qr-url">garbisoft.duckdns.org</div>
+        <div class="qr-url">monogoncode.dev</div>
       </a>
     </div>
 

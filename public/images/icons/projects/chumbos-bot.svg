@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="cbBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#042f2e" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="58" height="58" rx="14" fill="url(#cbBg)" stroke="#34d399" stroke-width="2" />
+  <!-- Chat Bubble -->
+  <path d="M32 12 C20 12 11 20 11 30.5 C11 35 13 39.2 16.5 42.5 L14 52 L24.5 48.2 C26.8 48.8 29.4 49 32 49 C44 49 53 41 53 30.5 C53 20 44 12 32 12 Z" fill="#22c55e" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" />
+  <!-- Autonomous Bot Eyes & Antenna / Node -->
+  <rect x="20" y="23" width="24" height="15" rx="6" fill="#052e16" stroke="#dcfce7" stroke-width="1.6" />
+  <circle cx="27" cy="30.5" r="2.8" fill="#38bdf8" />
+  <circle cx="37" cy="30.5" r="2.8" fill="#38bdf8" />
+  <line x1="32" y1="23" x2="32" y2="17.5" stroke="#dcfce7" stroke-width="1.8" stroke-linecap="round" />
+  <circle cx="32" cy="16.5" r="2.2" fill="#facc15" />
+</svg>

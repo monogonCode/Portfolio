@@ -2,6 +2,8 @@
 import logoChumbos from '../assets/HNOS-Chumbos/logo_chumbos.png';
 import logoGarbisoft from '../assets/Deltatraz/logo_garbisoft.png';
 import logoLidia from '../assets/PasteleriaLidiaHelem/logo.png';
+import logoControid from '../assets/Controid/controid.png';
+import logoXana from '../assets/Xana/xanatakecontrol.png';
 
 // Deltatraz images
 import dtWeb1 from '../assets/Deltatraz/2026-09-28_19-11.png';
@@ -108,7 +110,7 @@ export const PROJECT_MEDIA: Record<string, ProjectMediaConfig> = {
   },
 
   'chumbos-fichaje': {
-    logo: resolveImageSrc(logoChumbos),
+    logo: '/images/icons/projects/fichaje-agro.svg',
     companyName: 'Explotaciones Agrícolas Hermanos Chumbos S.L.',
     screenshots: [
       {
@@ -150,7 +152,7 @@ export const PROJECT_MEDIA: Record<string, ProjectMediaConfig> = {
   },
 
   'chumbos-chatbot': {
-    logo: resolveImageSrc(logoChumbos),
+    logo: '/images/icons/projects/chumbos-bot.svg',
     companyName: 'Explotaciones Agrícolas Hermanos Chumbos S.L.',
     screenshots: [
       {
@@ -212,13 +214,38 @@ export const PROJECT_MEDIA: Record<string, ProjectMediaConfig> = {
   },
 
   'FichasLidia': {
-    logo: resolveImageSrc(logoLidia),
+    logo: '/images/icons/projects/fichas-lidia.svg',
     companyName: 'Obrador de Pastelería Lidia Helem',
     screenshots: []
   },
   'lidia-automation': {
-    logo: resolveImageSrc(logoLidia),
+    logo: '/images/icons/projects/fichas-lidia.svg',
     companyName: 'Obrador de Pastelería Lidia Helem',
+    screenshots: []
+  },
+  'glados-assistant': {
+    logo: '/images/icons/projects/glados-assistant.svg',
+    companyName: 'Proyecto Personal / Linux AI',
+    screenshots: []
+  },
+  'transres-audio': {
+    logo: '/images/icons/projects/transres-audio.svg',
+    companyName: 'Proyecto Personal / IA Audio',
+    screenshots: []
+  },
+  'delta-servers': {
+    logo: '/images/icons/projects/delta-servers.svg',
+    companyName: 'DeltaGameServers / DevOps Infra',
+    screenshots: []
+  },
+  'controid': {
+    logo: resolveImageSrc(logoControid),
+    companyName: 'Proyecto Personal / Open Source',
+    screenshots: []
+  },
+  'xana-takecontrol': {
+    logo: resolveImageSrc(logoXana),
+    companyName: 'Proyecto Personal',
     screenshots: []
   }
 };
@@ -281,7 +308,7 @@ export const PROJECT_MEDIA_EN: Record<string, ProjectMediaConfig> = {
   },
 
   'chumbos-fichaje': {
-    logo: resolveImageSrc(logoChumbos),
+    logo: '/images/icons/projects/fichaje-agro.svg',
     companyName: 'Explotaciones Agrícolas Hermanos Chumbos S.L.',
     screenshots: [
       {
@@ -323,7 +350,7 @@ export const PROJECT_MEDIA_EN: Record<string, ProjectMediaConfig> = {
   },
 
   'chumbos-chatbot': {
-    logo: resolveImageSrc(logoChumbos),
+    logo: '/images/icons/projects/chumbos-bot.svg',
     companyName: 'Explotaciones Agrícolas Hermanos Chumbos S.L.',
     screenshots: [
       {
@@ -385,13 +412,38 @@ export const PROJECT_MEDIA_EN: Record<string, ProjectMediaConfig> = {
   },
 
   'FichasLidia': {
-    logo: resolveImageSrc(logoLidia),
+    logo: '/images/icons/projects/fichas-lidia.svg',
     companyName: 'Obrador de Pastelería Lidia Helem',
     screenshots: []
   },
   'lidia-automation': {
-    logo: resolveImageSrc(logoLidia),
+    logo: '/images/icons/projects/fichas-lidia.svg',
     companyName: 'Obrador de Pastelería Lidia Helem',
+    screenshots: []
+  },
+  'glados-assistant': {
+    logo: '/images/icons/projects/glados-assistant.svg',
+    companyName: 'Personal Project / Linux AI',
+    screenshots: []
+  },
+  'transres-audio': {
+    logo: '/images/icons/projects/transres-audio.svg',
+    companyName: 'Personal Project / Audio AI',
+    screenshots: []
+  },
+  'delta-servers': {
+    logo: '/images/icons/projects/delta-servers.svg',
+    companyName: 'DeltaGameServers / DevOps Infra',
+    screenshots: []
+  },
+  'controid': {
+    logo: resolveImageSrc(logoControid),
+    companyName: 'Personal / Open Source Project',
+    screenshots: []
+  },
+  'xana-takecontrol': {
+    logo: resolveImageSrc(logoXana),
+    companyName: 'Personal Project',
     screenshots: []
   }
 };
@@ -403,4 +455,12 @@ export const getProjectMedia = (lang: 'es' | 'en' = 'es'): Record<string, Projec
 export const LOGO_CHUMBOS = resolveImageSrc(logoChumbos);
 export const LOGO_GARBISOFT = resolveImageSrc(logoGarbisoft);
 export const LOGO_LIDIA = resolveImageSrc(logoLidia);
+export const LOGO_CONTROID = resolveImageSrc(logoControid);
+export const LOGO_XANA = resolveImageSrc(logoXana);
+export const LOGO_TRANSRES = '/images/icons/projects/transres-audio.svg';
+export const LOGO_DELTA_SERVERS = '/images/icons/projects/delta-servers.svg';
+export const LOGO_GLADOS = '/images/icons/projects/glados-assistant.svg';
+export const LOGO_FICHAJE_AGRO = '/images/icons/projects/fichaje-agro.svg';
+export const LOGO_CHUMBOS_BOT = '/images/icons/projects/chumbos-bot.svg';
+export const LOGO_FICHAS_LIDIA = '/images/icons/projects/fichas-lidia.svg';
 

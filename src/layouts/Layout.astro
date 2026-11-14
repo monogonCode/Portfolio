@@ -16,8 +16,10 @@ const {
 <html lang="es">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="canonical" href="https://monogoncode.dev/" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta name="description" content={description} />
@@ -26,6 +28,12 @@ const {
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://monogoncode.dev/" />
+		<meta property="og:image" content="https://monogoncode.dev/images/monogon-logo.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content="https://monogoncode.dev/images/monogon-logo.png" />
 	</head>
 	<body>
 		<slot />

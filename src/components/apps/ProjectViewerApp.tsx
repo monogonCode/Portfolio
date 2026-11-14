@@ -18,7 +18,10 @@ import {
   PixelClock, 
   PixelStore,
   PixelSparkles,
-  PixelLock
+  PixelLock,
+  PixelArrowLeft,
+  PixelArrowRight,
+  PixelClose
 } from '../ui/RetroIcons';
 import { getProjectMedia } from '../../data/projectMedia';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -88,6 +91,9 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
   const [activeTab, setActiveTab] = useState<'overview' | 'gallery' | 'architecture' | 'mockup' | 'specs'>('overview');
   const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
   const [mobileView, setMobileView] = useState<'list' | 'detail'>('detail');
+  const [activeArchStep, setActiveArchStep] = useState<number>(0);
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [copiedSummary, setCopiedSummary] = useState<boolean>(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -176,6 +182,9 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
   const handleSelectProject = (project: Project) => {
     sound.playClick();
     setSelectedProjectId(project.id);
+    setActiveArchStep(0);
+    setLightboxIdx(null);
+    setCopiedSummary(false);
     if (!project.hasMockup && activeTab === 'mockup') {
       setActiveTab('overview');
     }
@@ -186,6 +195,16 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
     if (isMobile) {
       setMobileView('detail');
     }
+  };
+
+  const handleCopySummary = () => {
+    sound.playClick();
+    const text = `${selectedProject.title} (${selectedProject.year})\n${selectedProject.tagline}\n${selectedProject.summary}\nStack: ${selectedProject.technologies.join(', ')}${selectedProject.liveUrl ? `\nWeb: ${selectedProject.liveUrl}` : ''}`;
+    try {
+      navigator.clipboard?.writeText(text);
+    } catch {}
+    setCopiedSummary(true);
+    setTimeout(() => setCopiedSummary(false), 2000);
   };
 
   const getCategoryPixelIcon = (cat: string) => {
@@ -227,59 +246,163 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
   const showSidebar = !isMobile || mobileView === 'list';
   const showDetail = !isMobile || mobileView === 'detail';
 
+  const currentIdx = filteredProjects.findIndex((p) => p.id === selectedProject.id);
+  const canPrevProject = currentIdx > 0;
+  const canNextProject = currentIdx >= 0 && currentIdx < filteredProjects.length - 1;
+
+  const stepProject = (delta: -1 | 1) => {
+    const target = filteredProjects[currentIdx + delta];
+    if (target) {
+      handleSelectProject(target);
+    }
+  };
+
   return (
-    <div style={{ display: 'flex', height: '100%', minHeight: isMobile ? '100%' : '480px', background: '#f0f0f0', color: '#111' }}>
-      {/* Sidebar / File Tree */}
-      {showSidebar && (
-        <div 
-          style={{ 
-            width: isMobile ? '100%' : '260px', 
-            borderRight: isMobile ? 'none' : '2px solid #808080', 
-            background: '#e0e0e0', 
-            display: 'flex', 
-            flexDirection: 'column',
-            padding: '8px',
-            height: '100%'
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: isMobile ? '100%' : '480px', background: '#c0c0c0', color: '#111' }}>
+      {/* Windows 98 Explorer Toolbar & Address Bar */}
+      <div
+        style={{
+          background: '#c0c0c0',
+          borderBottom: '1px solid #808080',
+          padding: '4px 6px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          flexWrap: 'wrap'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+          <button
+            className="win98-toolbar-btn"
+            style={{ minWidth: '40px', minHeight: '30px', flexDirection: 'row', gap: '4px', padding: '2px 7px' }}
+            disabled={!canPrevProject}
+            onClick={() => stepProject(-1)}
+            title={isEn ? 'Previous project' : 'Proyecto anterior'}
+            aria-label={isEn ? 'Previous project' : 'Proyecto anterior'}
+          >
+            <PixelArrowLeft size={14} color={canPrevProject ? '#000080' : '#808080'} />
+            <span style={{ fontSize: '11px' }}>{isEn ? 'Prev' : 'Ant.'}</span>
+          </button>
+          <button
+            className="win98-toolbar-btn"
+            style={{ minWidth: '40px', minHeight: '30px', flexDirection: 'row', gap: '4px', padding: '2px 7px' }}
+            disabled={!canNextProject}
+            onClick={() => stepProject(1)}
+            title={isEn ? 'Next project' : 'Proyecto siguiente'}
+            aria-label={isEn ? 'Next project' : 'Proyecto siguiente'}
+          >
+            <span style={{ fontSize: '11px' }}>{isEn ? 'Next' : 'Sig.'}</span>
+            <PixelArrowRight size={14} color={canNextProject ? '#000080' : '#808080'} />
+          </button>
+        </div>
+
+        <div
+          className="win98-bevel-inset"
+          style={{
+            flex: 1,
+            minWidth: '150px',
+            background: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '3px 8px',
+            fontSize: '12px',
+            color: '#000000'
           }}
         >
-          <div style={{ marginBottom: '8px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 'bold', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <PixelSearch size={13} />
+          <PixelFolder size={15} color="#eab308" />
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
+            {isEn ? `C:\\Projects\\${selectedProject.filename}` : `C:\\Proyectos\\${selectedProject.filename}`}
+          </span>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', flex: 1, minHeight: 0, background: '#f0f0f0' }}>
+      {/* Sidebar / File Tree */}
+      {showSidebar && (
+        <div
+          style={{
+            width: isMobile ? '100%' : '270px',
+            borderRight: isMobile ? 'none' : '2px solid #808080',
+            background: '#e0e0e0',
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '10px',
+            height: '100%',
+            minHeight: 0
+          }}
+        >
+          <div style={{ marginBottom: '10px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '5px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <PixelSearch size={15} />
               <span>{isEn ? 'Search projects:' : 'Buscar proyectos:'}</span>
             </div>
-            <input
-              type="text"
-              placeholder={isEn ? 'Filter by stack or name...' : 'Filtrar por stack o nombre...'}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '4px 6px',
-                fontSize: '11px',
-                border: '2px solid',
-                borderColor: '#808080 #ffffff #ffffff #808080',
-                background: '#ffffff'
-              }}
-            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <input
+                type="text"
+                aria-label={isEn ? 'Search projects' : 'Buscar proyectos'}
+                placeholder={isEn ? 'Filter by stack or name...' : 'Filtrar por stack o nombre...'}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  flex: 1,
+                  padding: isMobile ? '8px 8px' : '5px 7px',
+                  fontSize: '12px',
+                  border: '2px solid',
+                  borderColor: '#808080 #ffffff #ffffff #808080',
+                  background: '#ffffff'
+                }}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => {
+                    sound.playClick();
+                    setSearchQuery('');
+                  }}
+                  aria-label={isEn ? 'Clear search' : 'Limpiar búsqueda'}
+                  style={{
+                    padding: isMobile ? '8px' : '5px',
+                    background: '#d4d0c8',
+                    border: '2px solid',
+                    borderColor: '#ffffff #808080 #808080 #ffffff',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <PixelClose size={13} color="#000000" />
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Categories */}
-          <div style={{ marginBottom: '8px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 'bold', marginBottom: '3px' }}>
+          <div style={{ marginBottom: '10px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '4px' }}>
               {isEn ? 'Categories:' : 'Categorías:'}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <div
+              style={
+                isMobile
+                  ? { display: 'flex', flexDirection: 'row', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }
+                  : { display: 'flex', flexDirection: 'column', gap: '3px' }
+              }
+            >
               {categories.map((cat) => (
                 <button
                   key={cat.id}
+                  aria-pressed={selectedCategory === cat.id}
                   onClick={() => {
                     sound.playClick();
                     setSelectedCategory(cat.id);
                   }}
                   style={{
                     textAlign: 'left',
-                    fontSize: '11px',
-                    padding: '3px 6px',
+                    fontSize: '12px',
+                    padding: isMobile ? '7px 10px' : '4px 8px',
+                    whiteSpace: isMobile ? 'nowrap' : 'normal',
+                    flexShrink: 0,
                     cursor: 'pointer',
                     background: selectedCategory === cat.id ? '#000080' : '#d4d0c8',
                     color: selectedCategory === cat.id ? '#ffffff' : '#000000',
@@ -294,58 +417,103 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
           </div>
 
           {/* Project List */}
-          <div style={{ fontSize: '11px', fontWeight: 'bold', marginBottom: '3px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '4px' }}>
             {isEn ? `Files (${filteredProjects.length}):` : `Archivos (${filteredProjects.length}):`}
           </div>
-          <div 
-            style={{ 
-              flex: 1, 
-              overflowY: 'auto', 
-              background: '#ffffff', 
-              border: '2px solid', 
+          <div
+            role="listbox"
+            aria-label={isEn ? 'Project list' : 'Lista de proyectos'}
+            style={{
+              flex: 1,
+              minHeight: 0,
+              overflowY: 'auto',
+              background: '#ffffff',
+              border: '2px solid',
               borderColor: '#808080 #ffffff #ffffff #808080',
               padding: '4px'
             }}
           >
-            {filteredProjects.map((p) => {
-              const isSelected = p.id === selectedProjectId;
-              return (
-                <div
-                  key={p.id}
-                  onClick={() => handleSelectProject(p)}
+            {filteredProjects.length === 0 ? (
+              <div style={{ padding: '18px 10px', textAlign: 'center', fontSize: '12px', color: '#475569' }}>
+                <div style={{ marginBottom: '8px' }}>
+                  {isEn ? 'No projects match your current filter.' : 'Ningún proyecto coincide con el filtro.'}
+                </div>
+                <button
+                  onClick={() => {
+                    sound.playClick();
+                    setSearchQuery('');
+                    setSelectedCategory('ALL');
+                  }}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: isMobile ? '8px 6px' : '4px',
+                    padding: '6px 10px',
                     fontSize: '11px',
-                    cursor: 'pointer',
-                    background: isSelected ? '#000080' : 'transparent',
-                    color: isSelected ? '#ffffff' : '#000000',
-                    borderBottom: isMobile ? '1px solid #f1f5f9' : 'none'
+                    fontWeight: 'bold',
+                    background: '#000080',
+                    color: '#ffffff',
+                    border: '2px solid',
+                    borderColor: '#ffffff #000000 #000000 #ffffff',
+                    cursor: 'pointer'
                   }}
                 >
-                  <span style={{ display: 'flex', alignItems: 'center', width: '16px', height: '16px', justifyContent: 'center' }}>
-                    {projectMedia[p.id]?.logo ? (
-                      <img 
-                        src={projectMedia[p.id].logo} 
-                        alt="" 
-                        style={{ width: '15px', height: '15px', objectFit: 'contain', background: '#ffffff', borderRadius: '2px', padding: '1px', flexShrink: 0 }} 
-                      />
-                    ) : (
-                      getCategoryPixelIcon(p.category)
+                  {isEn ? 'Reset Filters' : 'Restablecer Filtros'}
+                </button>
+              </div>
+            ) : (
+              filteredProjects.map((p, idx) => {
+                const isSelected = p.id === selectedProjectId;
+                return (
+                  <div
+                    key={p.id}
+                    role="option"
+                    tabIndex={0}
+                    aria-selected={isSelected}
+                    onClick={() => handleSelectProject(p)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleSelectProject(p);
+                      } else if (e.key === 'ArrowDown' && idx < filteredProjects.length - 1) {
+                        e.preventDefault();
+                        handleSelectProject(filteredProjects[idx + 1]);
+                      } else if (e.key === 'ArrowUp' && idx > 0) {
+                        e.preventDefault();
+                        handleSelectProject(filteredProjects[idx - 1]);
+                      }
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: isMobile ? '10px 8px' : '6px',
+                      fontSize: '12.5px',
+                      cursor: 'pointer',
+                      background: isSelected ? '#000080' : 'transparent',
+                      color: isSelected ? '#ffffff' : '#000000',
+                      borderBottom: isMobile ? '1px solid #f1f5f9' : 'none'
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', width: '22px', height: '22px', justifyContent: 'center', flexShrink: 0 }}>
+                      {projectMedia[p.id]?.logo ? (
+                        <img
+                          src={projectMedia[p.id].logo}
+                          alt=""
+                          style={{ width: '20px', height: '20px', objectFit: 'contain', background: '#ffffff', borderRadius: '2px', padding: '1px', flexShrink: 0 }}
+                        />
+                      ) : (
+                        getCategoryPixelIcon(p.category)
+                      )}
+                    </span>
+                    <div style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <div style={{ fontWeight: isSelected ? 'bold' : 500 }}>{p.title}</div>
+                      <div style={{ fontSize: '10px', opacity: 0.85 }}>{p.filename}</div>
+                    </div>
+                    {isMobile && (
+                      <span style={{ fontSize: '12px', opacity: 0.75 }}>→</span>
                     )}
-                  </span>
-                  <div style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    <div style={{ fontWeight: isSelected ? 'bold' : 'normal' }}>{p.title}</div>
-                    <div style={{ fontSize: '9px', opacity: 0.8 }}>{p.filename}</div>
                   </div>
-                  {isMobile && (
-                    <span style={{ fontSize: '10px', opacity: 0.6 }}>→</span>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
       )}
@@ -406,8 +574,8 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
                   src={currentMedia.logo} 
                   alt="" 
                   style={{ 
-                    width: '44px', 
-                    height: '44px', 
+                    width: '52px', 
+                    height: '52px', 
                     objectFit: 'contain', 
                     background: '#ffffff', 
                     borderRadius: '4px', 
@@ -512,7 +680,7 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
                 }}
               >
                 <PixelGlobe size={13} color="#ffffff" />
-                <span>{isEn ? 'View in Internet Explorer' : 'Ver en Internet Explorer'}</span>
+                <span>{isEn ? 'Open Website' : 'Abrir Página Web'}</span>
               </button>
             )}
 
@@ -569,28 +737,46 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
 
         {/* Tabs Bar with Pixel Icons */}
         <div 
+          role="tablist"
+          className="retro-tab-strip"
           style={{ 
             display: 'flex', 
             background: '#dfdfdf', 
             borderBottom: '1px solid #808080',
-            paddingLeft: '12px'
+            paddingLeft: isMobile ? '6px' : '12px',
+            flexShrink: 0
           }}
         >
-          {availableTabs.map((tab) => {
+          {availableTabs.map((tab, tIdx) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => {
                   sound.playClick();
                   setActiveTab(tab.id);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowRight' && tIdx < availableTabs.length - 1) {
+                    e.preventDefault();
+                    sound.playClick();
+                    setActiveTab(availableTabs[tIdx + 1].id);
+                  } else if (e.key === 'ArrowLeft' && tIdx > 0) {
+                    e.preventDefault();
+                    sound.playClick();
+                    setActiveTab(availableTabs[tIdx - 1].id);
+                  }
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '5px',
-                  padding: '6px 14px',
-                  fontSize: '11px',
+                  gap: '6px',
+                  padding: isMobile ? '9px 14px' : '7px 14px',
+                  fontSize: '12px',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
                   cursor: 'pointer',
                   border: '2px solid',
                   borderColor: isActive ? '#ffffff #808080 #ffffff #ffffff' : '#dfdfdf',
@@ -608,7 +794,7 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
         </div>
 
         {/* Tab Content Body */}
-        <div style={{ padding: '16px', flex: 1, overflowY: 'auto' }}>
+        <div style={{ padding: isMobile ? '12px' : '16px', flex: 1, overflowY: 'auto' }}>
           {/* TAB: GALLERY (CAPTURES) */}
           {activeTab === 'gallery' && hasScreenshots && (
             <div>
@@ -647,7 +833,7 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
                 )}
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '14px' }}>
                 {currentMedia.screenshots.map((item, idx) => (
                   <div
                     key={idx}
@@ -662,29 +848,39 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
                       boxShadow: '1px 1px 4px rgba(0,0,0,0.1)'
                     }}
                   >
-                    <div 
-                      style={{ 
-                        background: '#09090b', 
-                        height: '180px', 
-                        display: 'flex', 
-                        alignItems: 'center', 
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sound.playClick();
+                        setLightboxIdx(idx);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setLightboxIdx(idx);
+                        }
+                      }}
+                      style={{
+                        width: '100%',
+                        border: 'none',
+                        background: '#09090b',
+                        height: '180px',
+                        display: 'flex',
+                        alignItems: 'center',
                         justifyContent: 'center',
                         position: 'relative',
                         cursor: 'pointer',
                         padding: '6px'
                       }}
-                      onClick={() => {
-                        if (onOpenImageViewer) onOpenImageViewer(selectedProject.id);
-                      }}
-                      title={isEn ? 'Click to open full screen in Image Viewer' : 'Clic para abrir en pantalla completa en el Visor de Imágenes'}
+                      title={isEn ? 'Click to preview enlarged screenshot' : 'Clic para ampliar captura aquí'}
                     >
-                      <img 
-                        src={item.src} 
-                        alt={item.title} 
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} 
+                      <img
+                        src={item.src}
+                        alt={item.title}
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                       />
                       {item.badge && (
-                        <span 
+                        <span
                           style={{
                             position: 'absolute',
                             top: '6px',
@@ -701,7 +897,7 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
                           {item.badge}
                         </span>
                       )}
-                    </div>
+                    </button>
                     <div style={{ padding: '10px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', background: '#f8fafc' }}>
                       <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#0f172a', marginBottom: '4px' }}>
                         {item.title}
@@ -747,27 +943,64 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
                 ))}
               </div>
 
-              <h4 style={{ fontSize: '13px', margin: '0 0 8px 0', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <PixelCode size={14} color="#0284c7" />
-                <span>{isEn ? 'Technologies Used:' : 'Tecnologías Empleadas:'}</span>
-              </h4>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 0 8px 0', gap: '8px', flexWrap: 'wrap' }}>
+                <h4 style={{ fontSize: '13px', margin: 0, color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <PixelCode size={14} color="#0284c7" />
+                  <span>{isEn ? 'Technologies Used (click to filter):' : 'Tecnologías Empleadas (clic para filtrar):'}</span>
+                </h4>
+                <button
+                  type="button"
+                  onClick={handleCopySummary}
+                  style={{
+                    padding: '4px 10px',
+                    fontSize: '11px',
+                    fontWeight: 'bold',
+                    background: copiedSummary ? '#15803d' : '#d4d0c8',
+                    color: copiedSummary ? '#ffffff' : '#000000',
+                    border: '2px solid',
+                    borderColor: copiedSummary ? '#86efac #14532d #14532d #86efac' : '#ffffff #808080 #808080 #ffffff',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {copiedSummary
+                    ? isEn ? '✓ Summary Copied' : '✓ Ficha Copiada'
+                    : isEn ? 'Copy Summary' : 'Copiar Resumen'}
+                </button>
+              </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                {selectedProject.technologies.map((t, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      fontSize: '11px',
-                      padding: '3px 8px',
-                      background: '#e2e8f0',
-                      border: '1px solid #cbd5e1',
-                      borderRadius: '3px',
-                      fontWeight: 'bold',
-                      color: '#1e293b'
-                    }}
-                  >
-                    {t}
-                  </span>
-                ))}
+                {selectedProject.technologies.map((t, i) => {
+                  const isFiltering = searchQuery.toLowerCase() === t.toLowerCase();
+                  return (
+                    <button
+                      type="button"
+                      key={i}
+                      aria-pressed={isFiltering}
+                      onClick={() => {
+                        sound.playClick();
+                        setSearchQuery(isFiltering ? '' : t);
+                        if (isMobile) setMobileView('list');
+                      }}
+                      title={
+                        isEn
+                          ? `Filter projects using ${t}`
+                          : `Filtrar proyectos que usan ${t}`
+                      }
+                      style={{
+                        fontSize: '11.5px',
+                        padding: '5px 10px',
+                        background: isFiltering ? '#000080' : '#e2e8f0',
+                        border: '1px solid',
+                        borderColor: isFiltering ? '#000080' : '#cbd5e1',
+                        borderRadius: '3px',
+                        fontWeight: 'bold',
+                        color: isFiltering ? '#ffffff' : '#1e293b',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {t}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -777,13 +1010,48 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
             <div>
               <h4 style={{ fontSize: '13px', margin: '0 0 8px 0', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <PixelLayout size={14} color="#0284c7" />
-                <span>{isEn ? 'Flow Diagram & Topology:' : 'Diagrama de Flujo & Topología:'}</span>
+                <span>{isEn ? 'Interactive Pipeline & Topology:' : 'Flujo Interactivo & Topología:'}</span>
               </h4>
-              <div 
-                style={{ 
-                  background: '#0f172a', 
-                  color: '#38bdf8', 
-                  padding: '14px', 
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                {selectedProject.architecture.split(/→|->/).map((node, idx, arr) => {
+                  const clean = node.trim();
+                  const isActiveNode = activeArchStep === idx;
+                  return (
+                    <React.Fragment key={idx}>
+                      <button
+                        type="button"
+                        aria-pressed={isActiveNode}
+                        onClick={() => {
+                          sound.playClick();
+                          setActiveArchStep(idx);
+                        }}
+                        style={{
+                          padding: '7px 12px',
+                          borderRadius: '4px',
+                          fontFamily: 'monospace',
+                          fontSize: '12px',
+                          fontWeight: 'bold',
+                          cursor: 'pointer',
+                          background: isActiveNode ? '#0f172a' : '#e2e8f0',
+                          color: isActiveNode ? '#38bdf8' : '#0f172a',
+                          border: isActiveNode ? `2px solid ${selectedProject.accentColor}` : '1px solid #94a3b8'
+                        }}
+                      >
+                        {idx + 1}. {clean}
+                      </button>
+                      {idx < arr.length - 1 && (
+                        <span style={{ fontWeight: 'bold', color: '#64748b' }}>→</span>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+              <div
+                aria-live="polite"
+                style={{
+                  background: '#0f172a',
+                  color: '#38bdf8',
+                  padding: '12px 14px',
                   borderRadius: '4px',
                   fontFamily: 'monospace',
                   fontSize: '12px',
@@ -791,6 +1059,9 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
                   border: '2px solid #334155'
                 }}
               >
+                <div style={{ color: '#94a3b8', fontSize: '11px', marginBottom: '4px' }}>
+                  {isEn ? `Stage ${activeArchStep + 1} active in pipeline:` : `Fase ${activeArchStep + 1} seleccionada en el flujo:`}
+                </div>
                 {selectedProject.architecture}
               </div>
 
@@ -1027,6 +1298,186 @@ export const ProjectViewerApp: React.FC<ProjectViewerAppProps> = ({
           )}
         </div>
       </div>
+      )}
+      </div>
+
+      {/* Inline Accessible Screenshot Lightbox Modal */}
+      {lightboxIdx !== null && hasScreenshots && currentMedia?.screenshots[lightboxIdx] && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={currentMedia.screenshots[lightboxIdx].title}
+          tabIndex={-1}
+          onClick={() => setLightboxIdx(null)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              setLightboxIdx(null);
+            } else if (e.key === 'ArrowRight') {
+              setLightboxIdx((prev) => (prev !== null ? (prev + 1) % currentMedia.screenshots.length : 0));
+            } else if (e.key === 'ArrowLeft') {
+              setLightboxIdx((prev) =>
+                prev !== null
+                  ? (prev - 1 + currentMedia.screenshots.length) % currentMedia.screenshots.length
+                  : 0
+              );
+            }
+          }}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 99999,
+            background: 'rgba(15, 23, 42, 0.88)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: isMobile ? '10px' : '24px'
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: '#c0c0c0',
+              border: '2px solid',
+              borderColor: '#ffffff #000000 #000000 #ffffff',
+              maxWidth: '880px',
+              width: '100%',
+              maxHeight: '90dvh',
+              display: 'flex',
+              flexDirection: 'column',
+              boxShadow: '0 12px 35px rgba(0,0,0,0.65)'
+            }}
+          >
+            <div
+              style={{
+                background: 'linear-gradient(90deg, #000080, #1084d0)',
+                color: '#ffffff',
+                padding: '6px 10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '8px',
+                fontSize: '12px',
+                fontWeight: 'bold'
+              }}
+            >
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {currentMedia.screenshots[lightboxIdx].title} ({lightboxIdx + 1}/{currentMedia.screenshots.length})
+              </span>
+              <button
+                type="button"
+                aria-label={isEn ? 'Close preview' : 'Cerrar vista previa'}
+                onClick={() => setLightboxIdx(null)}
+                style={{
+                  background: '#c0c0c0',
+                  border: '2px solid',
+                  borderColor: '#ffffff #000000 #000000 #ffffff',
+                  padding: '2px 7px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  fontSize: '12px'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div
+              style={{
+                background: '#09090b',
+                padding: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                maxHeight: '62dvh',
+                overflow: 'hidden'
+              }}
+            >
+              <img
+                src={currentMedia.screenshots[lightboxIdx].src}
+                alt={currentMedia.screenshots[lightboxIdx].title}
+                style={{ maxWidth: '100%', maxHeight: '58dvh', objectFit: 'contain' }}
+              />
+            </div>
+
+            <div
+              style={{
+                padding: '10px 12px',
+                background: '#f8fafc',
+                borderTop: '1px solid #808080',
+                display: 'flex',
+                flexDirection: isMobile ? 'column' : 'row',
+                alignItems: isMobile ? 'stretch' : 'center',
+                justifyContent: 'space-between',
+                gap: '10px'
+              }}
+            >
+              <div style={{ fontSize: '12px', color: '#334155', lineHeight: 1.4 }}>
+                {currentMedia.screenshots[lightboxIdx].caption}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setLightboxIdx((prev) =>
+                      prev !== null
+                        ? (prev - 1 + currentMedia.screenshots.length) % currentMedia.screenshots.length
+                        : 0
+                    )
+                  }
+                  style={{
+                    padding: '6px 10px',
+                    fontSize: '11px',
+                    fontWeight: 'bold',
+                    background: '#d4d0c8',
+                    border: '2px solid',
+                    borderColor: '#ffffff #808080 #808080 #ffffff',
+                    cursor: 'pointer'
+                  }}
+                >
+                  ← {isEn ? 'Prev' : 'Ant.'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setLightboxIdx((prev) => (prev !== null ? (prev + 1) % currentMedia.screenshots.length : 0))
+                  }
+                  style={{
+                    padding: '6px 10px',
+                    fontSize: '11px',
+                    fontWeight: 'bold',
+                    background: '#d4d0c8',
+                    border: '2px solid',
+                    borderColor: '#ffffff #808080 #808080 #ffffff',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {isEn ? 'Next' : 'Sig.'} →
+                </button>
+                {onOpenImageViewer && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLightboxIdx(null);
+                      onOpenImageViewer(selectedProject.id);
+                    }}
+                    style={{
+                      padding: '6px 10px',
+                      fontSize: '11px',
+                      fontWeight: 'bold',
+                      background: '#000080',
+                      color: '#ffffff',
+                      border: '2px solid',
+                      borderColor: '#ffffff #000000 #000000 #ffffff',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {isEn ? 'Full Viewer' : 'Visor Completo'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

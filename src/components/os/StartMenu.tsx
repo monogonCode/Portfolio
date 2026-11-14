@@ -11,10 +11,8 @@ import {
   PixelGamepad,
   PixelDownload,
   PixelPower,
-  PixelUser,
   PixelGithub,
   PixelLinkedin,
-  PixelGlobe,
   PixelSparkles
 } from '../ui/RetroIcons';
 import { LOGO_CHUMBOS } from '../../data/projectMedia';
@@ -100,15 +98,6 @@ export const StartMenu: React.FC<StartMenuProps> = ({
 
         <div
           className="system7-dropdown-item"
-          onClick={() => handleAppClick('browser')}
-          title={isEn ? 'Web Browser' : 'Navegador Web'}
-        >
-          <img src="/images/icons/mac/macse.png" alt="" style={{ width: '15px', height: '15px', objectFit: 'contain' }} />
-          <span>{isEn ? 'Web Browser' : 'Navegador Web'}</span>
-        </div>
-
-        <div
-          className="system7-dropdown-item"
           onClick={() => handleAppClick('terminal')}
           title={isEn ? 'Macintosh Terminal' : 'Terminal Macintosh'}
         >
@@ -189,12 +178,13 @@ export const StartMenu: React.FC<StartMenuProps> = ({
   if (isXP) {
     return (
       <div className="xp-start-menu">
-        {/* Blue Header with Avatar and User Name */}
+        {/* Blue Header with MONOGON Logo Avatar and User Name */}
         <div className="xp-menu-header">
           <img
-            src="/images/icons/xp/user.webp"
+            src="/images/monogon-logo-128.png"
             alt={PROFILE.name}
             className="xp-menu-avatar"
+            style={{ background: '#0f172a', padding: '4px', objectFit: 'contain' }}
           />
           <div className="xp-menu-username">{PROFILE.name}</div>
         </div>
@@ -205,13 +195,13 @@ export const StartMenu: React.FC<StartMenuProps> = ({
           <div className="xp-menu-left">
             <div
               className="xp-left-item"
-              onClick={() => handleAppClick('browser')}
-              title={isEn ? 'Browse the Web with Internet Explorer' : 'Navegar por la Web con Internet Explorer'}
+              onClick={() => handleAppClick('projects')}
+              title={isEn ? "Open Martín's Project Explorer" : 'Abrir Explorador de Proyectos de Martín'}
             >
-              <img src="/images/icons/xp/ie.webp" alt="IE" className="xp-left-icon" />
+              <img src="/images/icons/xp/folder.webp" alt="Proyectos" className="xp-left-icon" />
               <div>
-                <div className="xp-item-title">Internet</div>
-                <div className="xp-item-sub">Internet Explorer</div>
+                <div className="xp-item-title">{isEn ? 'Projects' : 'Proyectos'}</div>
+                <div className="xp-item-sub">{isEn ? 'Project Explorer' : 'Explorador de Proyectos'}</div>
               </div>
             </div>
 
@@ -238,9 +228,9 @@ export const StartMenu: React.FC<StartMenuProps> = ({
                   : 'Abrir IA de Transcripción y Restauración de Audio'
               }
             >
-              <img src="/images/icons/xp/media-player.webp" alt="Media Player" className="xp-left-icon" />
+              <img src="/images/icons/projects/transres-audio.svg" alt="TransResAudio" className="xp-left-icon" />
               <div>
-                <div className="xp-item-title">Windows Media</div>
+                <div className="xp-item-title">TransResAudio AI</div>
                 <div className="xp-item-sub">TransResAudio.ai</div>
               </div>
             </div>
@@ -324,8 +314,8 @@ export const StartMenu: React.FC<StartMenuProps> = ({
                   : 'Servidores Linux, Podman y Microservicios'
               }
             >
-              <img src="/images/icons/xp/network.webp" alt="Red" className="xp-right-icon" />
-              <span>{isEn ? 'My Network Places' : 'Mis sitios de red'}</span>
+              <img src="/images/icons/projects/delta-servers.svg" alt="DeltaGameServers" className="xp-right-icon" />
+              <span>{isEn ? 'Servers & Infra' : 'Servidores e Infra'}</span>
             </div>
 
             <div
@@ -433,8 +423,8 @@ export const StartMenu: React.FC<StartMenuProps> = ({
       <div className="start-menu-content">
         {/* User Header */}
         <div className="start-menu-header">
-          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <PixelUser size={18} color="#ffffff" />
+          <div style={{ width: '30px', height: '30px', borderRadius: '6px', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3px', border: '1px solid #334155', flexShrink: 0 }}>
+            <img src="/images/monogon-logo-128.png" alt="MONOGON" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
           <div>
             <div style={{ fontWeight: 'bold', fontSize: '12px' }}>{PROFILE.name}</div>
@@ -464,11 +454,6 @@ export const StartMenu: React.FC<StartMenuProps> = ({
           <div className="start-menu-item" onClick={() => handleAppClick('cv')}>
             <PixelFileText size={16} color="#0284c7" />
             <span>Curriculum Vitae</span>
-          </div>
-
-          <div className="start-menu-item" onClick={() => handleAppClick('browser')}>
-            <PixelGlobe size={16} color="#0284c7" />
-            <span>Internet Explorer</span>
           </div>
 
           <div className="start-menu-item" onClick={() => handleAppClick('terminal')}>

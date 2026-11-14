@@ -3,14 +3,12 @@ import type { WindowState } from './Window';
 import { sound } from '../../lib/sound';
 import { useLanguage } from '../../i18n/LanguageContext';
 import {
-  PixelFlag,
   PixelFolder,
   PixelTerminal,
   PixelTv,
   PixelVolume2,
   PixelVolumeX,
   PixelSliders,
-  PixelGlobe,
   PixelLanguage
 } from '../ui/RetroIcons';
 
@@ -247,6 +245,8 @@ export const Taskbar: React.FC<TaskbarProps> = ({
       {isXP ? (
         <button
           className={`taskbar-start-btn xp-start-btn ${startMenuOpen ? 'active' : ''}`}
+          aria-expanded={startMenuOpen}
+          aria-label={isEn ? 'Start menu' : 'Menú Inicio'}
           onClick={() => {
             sound.playClick();
             onToggleStartMenu();
@@ -259,6 +259,8 @@ export const Taskbar: React.FC<TaskbarProps> = ({
       ) : (
         <button
           className={`taskbar-start-btn ${startMenuOpen ? 'active' : ''}`}
+          aria-expanded={startMenuOpen}
+          aria-label={isEn ? 'Start menu' : 'Menú Inicio'}
           onClick={() => {
             sound.playClick();
             onToggleStartMenu();
@@ -268,60 +270,34 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             borderColor: startMenuOpen ? '#808080 #ffffff #ffffff #808080' : '#ffffff #808080 #808080 #ffffff',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '7px'
           }}
         >
-          <PixelFlag size={14} color="#000080" />
+          <img
+            src="/images/monogon-logo-128.png"
+            alt="MONOGON"
+            style={{ width: '22px', height: '22px', objectFit: 'contain', background: '#0f172a', borderRadius: '3px', padding: '1px' }}
+          />
           <span>{isEn ? 'Start' : 'Inicio'}</span>
         </button>
       )}
 
       {/* Quick Launch Icons */}
       <div
+        className="xp-quick-launch"
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: isXP ? '4px' : '3px',
-          padding: '0 4px',
+          gap: isXP ? '5px' : '4px',
+          padding: '0 5px',
           borderRight: isXP ? '1px solid rgba(255,255,255,0.2)' : '1px solid #808080',
           borderLeft: isXP ? 'none' : '1px solid #ffffff',
           margin: '0 4px'
         }}
       >
         <button
-          title={isEn ? 'Open Internet Explorer' : 'Abrir Internet Explorer'}
-          className={isXP ? 'xp-quick-launch-btn' : ''}
-          onClick={() => {
-            sound.playClick();
-            onOpenApp('browser');
-          }}
-          style={
-            isXP
-              ? undefined
-              : {
-                  width: '26px',
-                  minWidth: '26px',
-                  maxWidth: '26px',
-                  height: '24px',
-                  minHeight: 'unset',
-                  padding: '0',
-                  background: '#d4d0c8',
-                  border: '1px solid #808080',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }
-          }
-        >
-          {isXP ? (
-            <img src="/images/icons/xp/ie.webp" alt="IE" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
-          ) : (
-            <PixelGlobe size={16} color="#0284c7" />
-          )}
-        </button>
-        <button
           title={isEn ? 'Open Project Explorer' : 'Abrir Explorador de Proyectos'}
+          aria-label={isEn ? 'Open Project Explorer' : 'Abrir Explorador de Proyectos'}
           className={isXP ? 'xp-quick-launch-btn' : ''}
           onClick={() => {
             sound.playClick();
@@ -331,10 +307,10 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             isXP
               ? undefined
               : {
-                  width: '26px',
-                  minWidth: '26px',
-                  maxWidth: '26px',
-                  height: '24px',
+                  width: '34px',
+                  minWidth: '34px',
+                  maxWidth: '34px',
+                  height: '32px',
                   minHeight: 'unset',
                   padding: '0',
                   background: '#d4d0c8',
@@ -347,13 +323,14 @@ export const Taskbar: React.FC<TaskbarProps> = ({
           }
         >
           {isXP ? (
-            <img src="/images/icons/xp/folder.webp" alt="Proyectos" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
+            <img src="/images/icons/xp/folder.webp" alt="Proyectos" style={{ width: '22px', height: '22px', objectFit: 'contain' }} />
           ) : (
-            <PixelFolder size={16} color="#ca8a04" />
+            <PixelFolder size={20} color="#ca8a04" />
           )}
         </button>
         <button
           title={isEn ? 'Open MS-DOS Prompt' : 'Abrir Terminal MS-DOS'}
+          aria-label={isEn ? 'Open MS-DOS Prompt' : 'Abrir Terminal MS-DOS'}
           className={isXP ? 'xp-quick-launch-btn' : ''}
           onClick={() => {
             sound.playClick();
@@ -363,10 +340,10 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             isXP
               ? undefined
               : {
-                  width: '26px',
-                  minWidth: '26px',
-                  maxWidth: '26px',
-                  height: '24px',
+                  width: '34px',
+                  minWidth: '34px',
+                  maxWidth: '34px',
+                  height: '32px',
                   minHeight: 'unset',
                   padding: '0',
                   background: '#d4d0c8',
@@ -379,9 +356,9 @@ export const Taskbar: React.FC<TaskbarProps> = ({
           }
         >
           {isXP ? (
-            <img src="/images/icons/xp/cmd.webp" alt="Terminal" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
+            <img src="/images/icons/xp/cmd.webp" alt="Terminal" style={{ width: '22px', height: '22px', objectFit: 'contain' }} />
           ) : (
-            <PixelTerminal size={16} color="#16a34a" />
+            <PixelTerminal size={20} color="#16a34a" />
           )}
         </button>
 
@@ -399,13 +376,13 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             isXP
               ? {
                   width: 'auto',
-                  minWidth: '42px',
-                  height: '24px',
-                  padding: '0 6px',
+                  minWidth: '48px',
+                  height: '32px',
+                  padding: '0 8px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '4px',
+                  gap: '5px',
                   background: isEn ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.18)',
                   border: isEn ? '1px solid rgba(255, 255, 255, 0.6)' : '1px solid rgba(255, 255, 255, 0.25)',
                   borderRadius: '3px',
@@ -414,10 +391,10 @@ export const Taskbar: React.FC<TaskbarProps> = ({
                 }
               : {
                   width: 'auto',
-                  minWidth: '42px',
-                  height: '24px',
+                  minWidth: '48px',
+                  height: '32px',
                   minHeight: 'unset',
-                  padding: '0 5px',
+                  padding: '0 7px',
                   background: isEn ? '#000080' : '#d4d0c8',
                   color: isEn ? '#ffffff' : '#000080',
                   border: '1px solid #808080',
@@ -428,13 +405,13 @@ export const Taskbar: React.FC<TaskbarProps> = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '3px',
+                  gap: '4px',
                   transition: 'background 0.15s ease, color 0.15s ease'
                 }
           }
         >
           <PixelLanguage
-            size={14}
+            size={16}
             color={isXP ? '#38bdf8' : isEn ? '#38bdf8' : '#000080'}
             style={{
               transform: langAnim ? 'scale(1.22) rotate(-10deg)' : 'scale(1) rotate(0deg)',
@@ -443,7 +420,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
           />
           <span
             style={{
-              fontSize: '10px',
+              fontSize: '11px',
               fontWeight: 'bold',
               fontFamily: 'monospace',
               letterSpacing: '0.5px',
@@ -463,14 +440,15 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               key={win.id}
               className={`taskbar-app-tab ${isXP ? 'xp-app-tab' : ''} ${isActive ? 'active' : ''}`}
+              aria-pressed={isActive}
               onClick={() => {
                 sound.playClick();
                 onSelectWindow(win.id);
               }}
               title={win.title}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '7px' }}
             >
-              {win.icon || <PixelFolder size={12} />}
+              {win.icon || <PixelFolder size={16} />}
               <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {win.title}
               </span>
@@ -491,15 +469,16 @@ export const Taskbar: React.FC<TaskbarProps> = ({
               ? `Current theme: ${currentTheme.toUpperCase()} (Click to cycle theme)`
               : `Tema actual: ${currentTheme.toUpperCase()} (Clic para alternar tema)`
           }
+          aria-label={isEn ? `Cycle theme, current ${currentTheme}` : `Cambiar tema, actual ${currentTheme}`}
           onClick={() => {
             sound.playClick();
             onNextTheme();
           }}
           style={{
-            padding: '1px 5px',
-            fontSize: '10px',
+            padding: '4px 7px',
+            fontSize: '11px',
             minWidth: 'unset',
-            minHeight: 'unset',
+            minHeight: '30px',
             background: isXP ? 'rgba(255,255,255,0.15)' : '#ffffff',
             border: isXP ? '1px solid rgba(255,255,255,0.35)' : '1px solid #808080',
             color: isXP ? '#ffffff' : '#000000',
@@ -508,10 +487,10 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             borderRadius: '2px',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px'
+            gap: '5px'
           }}
         >
-          <PixelSliders size={11} color={isXP ? '#ffffff' : '#000080'} />
+          <PixelSliders size={14} color={isXP ? '#ffffff' : '#000080'} />
           <span>{currentTheme.toUpperCase()}</span>
         </button>
 
@@ -526,6 +505,8 @@ export const Taskbar: React.FC<TaskbarProps> = ({
               ? 'Desactivar efecto CRT Scanlines'
               : 'Activar efecto CRT Scanlines'
           }
+          aria-label={isEn ? 'Toggle CRT effect' : 'Alternar efecto CRT'}
+          aria-pressed={crtEnabled}
           onClick={() => {
             sound.playClick();
             onToggleCrt();
@@ -540,24 +521,20 @@ export const Taskbar: React.FC<TaskbarProps> = ({
               ? 'rgba(255,255,255,0.25)'
               : '#94a3b8 #0f172a #0f172a #94a3b8',
             cursor: 'pointer',
-            padding: isMobile ? '2px 4px' : '2px 6px',
-            fontSize: '9px',
+            padding: isMobile ? '4px 6px' : '4px 8px',
+            fontSize: '10px',
             fontWeight: 'bold',
             minWidth: 'unset',
-            minHeight: 'unset',
+            minHeight: '30px',
             display: 'flex',
             alignItems: 'center',
-            gap: isMobile ? '2px' : '4px',
+            gap: isMobile ? '3px' : '5px',
             borderRadius: isXP ? '2px' : '0'
           }}
         >
-          <PixelTv size={12} color="#ffffff" />
-          <span>
-            {isMobile
-              ? crtEnabled
-                ? 'CRT ON'
-                : 'CRT OFF'
-              : isEn
+          <PixelTv size={14} color="#ffffff" />
+          <span className="taskbar-tray-label-desktop">
+            {isEn
               ? crtEnabled
                 ? 'DISABLE CRT'
                 : 'ENABLE CRT'
@@ -578,6 +555,8 @@ export const Taskbar: React.FC<TaskbarProps> = ({
               ? 'Silenciar sonidos (MUTE)'
               : 'Activar sonidos'
           }
+          aria-label={isEn ? (soundEnabled ? 'Mute sounds' : 'Unmute sounds') : soundEnabled ? 'Silenciar sonidos' : 'Activar sonidos'}
+          aria-pressed={!soundEnabled}
           onClick={() => {
             onToggleSound();
           }}
@@ -586,23 +565,23 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             color: soundEnabled ? (isXP ? '#ffffff' : '#1e40af') : '#94a3b8',
             border: isXP ? '1px solid rgba(255,255,255,0.25)' : '1px solid #94a3b8',
             cursor: 'pointer',
-            padding: isMobile ? '2px 4px' : '2px 6px',
-            fontSize: '9px',
+            padding: isMobile ? '4px 6px' : '4px 8px',
+            fontSize: '10px',
             fontWeight: 'bold',
             minWidth: 'unset',
-            minHeight: 'unset',
+            minHeight: '30px',
             display: 'flex',
             alignItems: 'center',
-            gap: isMobile ? '2px' : '4px',
+            gap: isMobile ? '3px' : '5px',
             borderRadius: isXP ? '2px' : '0'
           }}
         >
           {soundEnabled ? (
-            <PixelVolume2 size={12} color={isXP ? '#ffffff' : '#1d4ed8'} />
+            <PixelVolume2 size={14} color={isXP ? '#ffffff' : '#1d4ed8'} />
           ) : (
-            <PixelVolumeX size={12} color="#94a3b8" />
+            <PixelVolumeX size={14} color="#94a3b8" />
           )}
-          <span>{soundEnabled ? 'MUTE' : 'UNMUTE'}</span>
+          <span className="taskbar-tray-label-desktop">{soundEnabled ? 'MUTE' : 'UNMUTE'}</span>
         </button>
 
         {/* Real-time Clock */}
@@ -611,7 +590,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             fontFamily: isXP ? "'Trebuchet MS', 'Segoe UI', Tahoma, sans-serif" : 'monospace',
             fontWeight: 'bold',
             paddingLeft: '4px',
-            fontSize: '11px',
+            fontSize: '12px',
             color: isXP ? '#ffffff' : '#000000',
             textShadow: isXP ? '1px 1px 1px rgba(0,0,0,0.7)' : 'none'
           }}

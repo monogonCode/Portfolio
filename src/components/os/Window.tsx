@@ -98,7 +98,7 @@ export const Window: React.FC<WindowProps> = ({
 
     const isMacBar = typeof document !== 'undefined' && !!document.querySelector('.system7-menubar');
     const topOffset = isMacBar ? 22 : 0;
-    const bottomBarHeight = isMacBar ? 0 : 38;
+    const bottomBarHeight = isMacBar ? 0 : window.innerWidth < 768 ? 52 : 48;
 
     const newX = Math.max(-100, Math.min(window.innerWidth - 80, initialDragPos.current.x + dx));
     const newY = Math.max(topOffset, Math.min(window.innerHeight - 60, initialDragPos.current.y + dy));
@@ -198,7 +198,8 @@ export const Window: React.FC<WindowProps> = ({
       newWidth = Math.max(340, Math.min(window.innerWidth - newX, initialResizeSize.current.width + dx));
     }
     if (dir.includes('s')) {
-      newHeight = Math.max(220, Math.min(window.innerHeight - 38 - newY, initialResizeSize.current.height + dy));
+      const bottomBar = typeof window !== 'undefined' && window.innerWidth < 768 ? 52 : 48;
+      newHeight = Math.max(220, Math.min(window.innerHeight - bottomBar - newY, initialResizeSize.current.height + dy));
     }
     if (dir.includes('w')) {
       const possibleW = initialResizeSize.current.width - dx;
@@ -237,7 +238,7 @@ export const Window: React.FC<WindowProps> = ({
 
   const isMacBar = typeof document !== 'undefined' && !!document.querySelector('.system7-menubar');
   const topOffset = isMacBar ? 22 : 0;
-  const bottomBarHeight = isMacBar ? 0 : 38;
+  const bottomBarHeight = isMacBar ? 0 : isMobile ? 52 : 48;
 
   const windowStyle: React.CSSProperties = win.isMaximized || isMobile
     ? {
@@ -245,7 +246,7 @@ export const Window: React.FC<WindowProps> = ({
         top: topOffset,
         left: 0,
         width: '100vw',
-        height: `calc(100vh - ${topOffset + bottomBarHeight}px)`,
+        height: `calc(100dvh - ${topOffset + bottomBarHeight}px)`,
         zIndex: win.zIndex,
         display: 'flex',
         flexDirection: 'column'

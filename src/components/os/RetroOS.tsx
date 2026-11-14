@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Desktop } from './Desktop';
 import { Taskbar } from './Taskbar';
 import { StartMenu } from './StartMenu';
 import { Window, type WindowState, type SnapRect } from './Window';
 import { RetroBootScreen } from './RetroBootScreen';
 import { RetroShutdownScreen } from './RetroShutdownScreen';
-import { ProjectViewerApp } from '../apps/ProjectViewerApp';
-import { CVViewerApp } from '../apps/CVViewerApp';
-import { TerminalApp } from '../apps/TerminalApp';
-import { SettingsApp } from '../apps/SettingsApp';
-import { ContactApp } from '../apps/ContactApp';
-import { MinesweeperApp } from '../apps/MinesweeperApp';
-import { InternetExplorerApp } from '../apps/InternetExplorerApp';
 import { sound } from '../../lib/sound';
 import { PROJECTS, getProjects } from '../../data/projects';
 import { LanguageProvider, useLanguage } from '../../i18n/LanguageContext';
@@ -22,12 +15,18 @@ import {
   PixelSettings,
   PixelMail,
   PixelBomb,
-  PixelGlobe,
   PixelSparkles
 } from '../ui/RetroIcons';
-import { ChumbosFolderApp } from '../apps/ChumbosFolderApp';
-import { ImageViewerApp } from '../apps/ImageViewerApp';
 import { LOGO_CHUMBOS, PROJECT_MEDIA } from '../../data/projectMedia';
+
+const ProjectViewerApp = lazy(() => import('../apps/ProjectViewerApp').then((m) => ({ default: m.ProjectViewerApp })));
+const CVViewerApp = lazy(() => import('../apps/CVViewerApp').then((m) => ({ default: m.CVViewerApp })));
+const TerminalApp = lazy(() => import('../apps/TerminalApp').then((m) => ({ default: m.TerminalApp })));
+const SettingsApp = lazy(() => import('../apps/SettingsApp').then((m) => ({ default: m.SettingsApp })));
+const ContactApp = lazy(() => import('../apps/ContactApp').then((m) => ({ default: m.ContactApp })));
+const MinesweeperApp = lazy(() => import('../apps/MinesweeperApp').then((m) => ({ default: m.MinesweeperApp })));
+const ChumbosFolderApp = lazy(() => import('../apps/ChumbosFolderApp').then((m) => ({ default: m.ChumbosFolderApp })));
+const ImageViewerApp = lazy(() => import('../apps/ImageViewerApp').then((m) => ({ default: m.ImageViewerApp })));
 
 const RetroOSInner: React.FC = () => {
   const { lang, isEn } = useLanguage();
@@ -39,7 +38,6 @@ const RetroOSInner: React.FC = () => {
   const [selectedIconId, setSelectedIconId] = useState<string | null>(null);
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
   const [selectedProjectId, setSelectedProjectId] = useState<string>(PROJECTS[0].id);
-  const [browserUrl, setBrowserUrl] = useState<string>('https://explotacioneschumbos.es');
   const [isShutDown, setIsShutDown] = useState<boolean>(false);
   const [isBooting, setIsBooting] = useState<boolean>(true);
   const [isDesktopExpanding, setIsDesktopExpanding] = useState<boolean>(false);
@@ -93,17 +91,17 @@ const RetroOSInner: React.FC = () => {
       position: { x: 60, y: 30 },
       size: { width: 840, height: 560 }
     },
-    {
-      id: 'browser',
-      title: 'Internet Explorer 5.0 - [Visualizador Web]',
-      icon: <PixelGlobe size={14} color="#0284c7" />,
-      isOpen: false,
-      isMinimized: false,
-      isMaximized: false,
-      zIndex: 8,
-      position: { x: 100, y: 45 },
-      size: { width: 920, height: 600 }
-    },
+    // {
+    //   id: 'browser',
+    //   title: 'Internet Explorer 5.0 - [Visualizador Web]',
+    //   icon: <PixelGlobe size={14} color="#0284c7" />,
+    //   isOpen: false,
+    //   isMinimized: false,
+    //   isMaximized: false,
+    //   zIndex: 8,
+    //   position: { x: 100, y: 45 },
+    //   size: { width: 920, height: 600 }
+    // },
     {
       id: 'cv',
       title: 'Curriculum Vitae - WordPad',
@@ -194,11 +192,6 @@ const RetroOSInner: React.FC = () => {
               ...w,
               title: isEn ? 'Project Explorer - Martín Garbiso' : 'Explorador de Proyectos - Martín Garbiso'
             };
-          case 'browser':
-            return {
-              ...w,
-              title: isEn ? 'Internet Explorer 5.0 - [Web Viewer]' : 'Internet Explorer 5.0 - [Visualizador Web]'
-            };
           case 'cv':
             return {
               ...w,
@@ -239,7 +232,7 @@ const RetroOSInner: React.FC = () => {
           prev.map((w) => ({
             ...w,
             position: { x: 0, y: 0 },
-            size: { width: window.innerWidth, height: window.innerHeight - 38 }
+            size: { width: window.innerWidth, height: window.innerHeight - 52 }
           }))
         );
       }
@@ -285,12 +278,19 @@ const RetroOSInner: React.FC = () => {
     }
   };
 
+  // Open external URL directly in a new tab
+  const openExternalUrl = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   // Open / toggle window
   const openApp = (appId: string, customParam?: string) => {
     sound.playWindowOpen();
 
     if (appId === 'browser' && customParam) {
-      setBrowserUrl(customParam);
+      openExternalUrl(customParam);
+      setStartMenuOpen(false);
+      return;
     }
 
     const localizedProjects = getProjects(lang);
@@ -302,10 +302,6 @@ const RetroOSInner: React.FC = () => {
 
       const media = PROJECT_MEDIA[matchingProject.id];
       const hasScreenshots = media && media.screenshots && media.screenshots.length > 0;
-
-      if (matchingProject.id === 'chumbos-portal' && matchingProject.liveUrl) {
-        setBrowserUrl(matchingProject.liveUrl);
-      }
 
       setWindows((prev) => {
         let highestZ = Math.max(...prev.map((w) => w.zIndex), 10);
@@ -331,23 +327,12 @@ const RetroOSInner: React.FC = () => {
                 : `Visor de Imágenes - [${matchingProject.title}] (${media.screenshots.length} capturas)`
             };
           }
-          if (matchingProject.id === 'chumbos-portal' && w.id === 'browser') {
-            highestZ += 1;
-            return {
-              ...w,
-              isOpen: true,
-              isMinimized: false,
-              zIndex: highestZ
-            };
-          }
           return w;
         });
       });
 
       if (hasScreenshots) {
         setActiveWindowId('image-viewer');
-      } else if (matchingProject.id === 'chumbos-portal') {
-        setActiveWindowId('browser');
       } else {
         setActiveWindowId('projects');
       }
@@ -502,70 +487,74 @@ const RetroOSInner: React.FC = () => {
                     );
                   }}
                 >
-                  {win.id === 'folder-chumbos' && (
-                    <ChumbosFolderApp
-                      onOpenProject={(pId) => openApp(pId)}
-                      onOpenBrowser={(url) => openApp('browser', url)}
-                    />
-                  )}
+                  <Suspense
+                    fallback={
+                      <div style={{ padding: '16px', fontSize: '12px', fontFamily: 'monospace', color: '#334155' }}>
+                        {isEn ? 'Loading application...' : 'Cargando aplicación...'}
+                      </div>
+                    }
+                  >
+                    {win.id === 'folder-chumbos' && (
+                      <ChumbosFolderApp
+                        onOpenProject={(pId) => openApp(pId)}
+                        onOpenBrowser={(url) => openExternalUrl(url)}
+                      />
+                    )}
 
-                  {win.id === 'image-viewer' && (
-                    <ImageViewerApp
-                      initialProjectId={selectedProjectId}
-                      onOpenProjectSpecs={(pId) => {
-                        setSelectedProjectId(pId);
-                        focusWindow('projects');
-                      }}
-                    />
-                  )}
+                    {win.id === 'image-viewer' && (
+                      <ImageViewerApp
+                        initialProjectId={selectedProjectId}
+                        onOpenProjectSpecs={(pId) => {
+                          setSelectedProjectId(pId);
+                          focusWindow('projects');
+                        }}
+                      />
+                    )}
 
-                  {win.id === 'projects' && (
-                    <ProjectViewerApp
-                      initialProjectId={selectedProjectId}
-                      onOpenProject={(pId) => setSelectedProjectId(pId)}
-                      onOpenBrowser={(url) => openApp('browser', url)}
-                      onOpenImageViewer={(pId) => {
-                        setSelectedProjectId(pId);
-                        openApp('image-viewer', pId);
-                      }}
-                    />
-                  )}
+                    {win.id === 'projects' && (
+                      <ProjectViewerApp
+                        initialProjectId={selectedProjectId}
+                        onOpenProject={(pId) => setSelectedProjectId(pId)}
+                        onOpenBrowser={(url) => openExternalUrl(url)}
+                        onOpenImageViewer={(pId) => {
+                          setSelectedProjectId(pId);
+                          openApp('image-viewer', pId);
+                        }}
+                      />
+                    )}
 
-                  {win.id === 'browser' && (
-                    <InternetExplorerApp initialUrl={browserUrl} />
-                  )}
+                    {win.id === 'cv' && <CVViewerApp />}
 
-                  {win.id === 'cv' && <CVViewerApp />}
+                    {win.id === 'terminal' && (
+                      <TerminalApp
+                        onSetTheme={(newTheme) => {
+                          if (['win98', 'winxp', 'mac', 'nes'].includes(newTheme)) {
+                            setTheme(newTheme as typeof theme);
+                            setBg(newTheme);
+                          }
+                        }}
+                        onOpenApp={(appId) => openApp(appId)}
+                      />
+                    )}
 
-                  {win.id === 'terminal' && (
-                    <TerminalApp
-                      onSetTheme={(newTheme) => {
-                        if (['win98', 'winxp', 'mac', 'nes'].includes(newTheme)) {
-                          setTheme(newTheme as typeof theme);
-                          setBg(newTheme);
-                        }
-                      }}
-                      onOpenApp={(appId) => openApp(appId)}
-                    />
-                  )}
+                    {win.id === 'settings' && (
+                      <SettingsApp
+                        currentTheme={theme}
+                        onSelectTheme={(t) => setTheme(t as typeof theme)}
+                        crtEnabled={crtEnabled}
+                        onToggleCrt={() => setCrtEnabled(!crtEnabled)}
+                        soundEnabled={soundEnabled}
+                        onToggleSound={toggleSound}
+                        currentBg={bg}
+                        onSelectBg={(b) => setBg(b)}
+                        onClose={() => closeWindow('settings')}
+                      />
+                    )}
 
-                  {win.id === 'settings' && (
-                    <SettingsApp
-                      currentTheme={theme}
-                      onSelectTheme={(t) => setTheme(t as typeof theme)}
-                      crtEnabled={crtEnabled}
-                      onToggleCrt={() => setCrtEnabled(!crtEnabled)}
-                      soundEnabled={soundEnabled}
-                      onToggleSound={toggleSound}
-                      currentBg={bg}
-                      onSelectBg={(b) => setBg(b)}
-                      onClose={() => closeWindow('settings')}
-                    />
-                  )}
+                    {win.id === 'contact' && <ContactApp onClose={() => closeWindow('contact')} />}
 
-                  {win.id === 'contact' && <ContactApp onClose={() => closeWindow('contact')} />}
-
-                  {win.id === 'minesweeper' && <MinesweeperApp />}
+                    {win.id === 'minesweeper' && <MinesweeperApp />}
+                  </Suspense>
                 </Window>
               );
             })}
